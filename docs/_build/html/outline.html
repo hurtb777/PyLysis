@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyLysis &mdash; PyLysis Documentation</title>
+    
+    <link rel="stylesheet" href="_static/agogo.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/tables.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PyLysis Documentation" href="index.html" />
+    <link rel="next" title="Getting Started" href="getting_started.html" />
+    <link rel="prev" title="Welcome to pyLysis’s documentation!" href="index.html" />
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-41652893-2', 'brianhurt.com');
+          ga('send', 'pageview');
+
+    </script>
+
+  </head>
+  <body>
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="index.html">
+            <img class="logo" src="_static/logo_2.png" alt="Logo"/>
+          </a></p>
+        <div class="headertitle"><a
+          href="index.html">PyLysis Documentation</a></div>
+        <div class="rel">
+          <a href="index.html" title="Welcome to pyLysis’s documentation!"
+             accesskey="P">previous</a> |
+          <a href="getting_started.html" title="Getting Started"
+             accesskey="N">next</a> |
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="about-pylysis">
+<span id="outline"></span><h1>About pyLysis<a class="headerlink" href="#about-pylysis" title="Permalink to this headline">¶</a></h1>
+<p>PyLysis is Python module for non-parametric non-linear modeling using Volterra-Laguerre Series and Principal Dynamic Modes (PDM).</p>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>A Volterra series, similar to a Taylor series expansion in structure, has the added benefit of capturing &#8216;memory&#8217; effects. However direct estimation of the higher order kernels is challenging for a pure Volterra series because kernel coefficients generally covary with one another so traditional regression techniques do poorly in parameter estimations. One way to simplify kernel estimation is through expanding them on a orthogonal Laguerre basis.</p>
+<p>Once the kernels are estimated, PDM analysis can be used to characterize and explain the dynamics of the underlying system. PDM analysis has been used in neuroscience and electrical engineering because of the timeseries-like nature of the measurements in these fields.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">Marmarelis, V. Z.
+Nonlinear Dynamic Modeling of Physiological Systems
+Wiley-IEEE Press, 2004.</p>
+</div>
+</div>
+<div class="section" id="model-structure">
+<h2>Model Structure<a class="headerlink" href="#model-structure" title="Permalink to this headline">¶</a></h2>
+<p>In discrete time, the general input <span class="math">\(x(n)\)</span> - output <span class="math">\(y(n)\)</span> relation of a stable (finite-memory) nonlinear time-invariant dynamic system is given by the discrete-time Volterra series</p>
+<div class="math">
+\[y(n) = k^{(0)} + \sum_{m_1=0}^{M} k^{(1)}_{m_1}x(n-m_1) + \sum_{m_1=0}^{M_1}\sum_{m_2=0}^{M_2} k^{(2)}_{m_1, m_2}x(n-m_1)x(n-m_2)+\cdots\]</div>
+<p>where <span class="math">\(k^{(n)}\)</span> are known as the Volterra kernels which describe the dynamics of the system at each order of nonlinearity, and constitute a complete and canonical representation of the nonlinear system. Estimating these kernels in practice is challenging because of the exponential scaling of parameters as the order of the model grows (for a model of order <span class="math">\(O\)</span> and finite memory <span class="math">\(M\)</span> the number of parameters to estimate are <span class="math">\(\sum_{i=0}^{O} M^i\)</span> (<span class="math">\(M\sim 50\)</span>). Furthermore the kernel coefficients can be estimated in practice by using linear regression, however in general kernel coefficients co-vary so further mathematical treatment is necessary.</p>
+<p>A useful practice is to transform the model into an orthogonal projection (which assures zero-covariance between parameters). Wiener suggested expanding the kernels by using <span class="math">\(L\)</span> orthogonal using Laguerre Basis functions <span class="math">\(\left\{ b_{j}(m) \right\}\)</span> which also have a built-in exponential term making them suitable for physical systems. An added benefit from a statistical perspective is that this transformation reduces the number of free paramters significantly( <span class="math">\(\sum_{i=0}^{O} L^i\)</span>, where <span class="math">\(L&lt;10\)</span> ). For this module a Volterra-Laguerre series is used which is given by</p>
+<div class="math">
+\[y(n) = c^{(0)} + \sum_{j_1=0}^{L} c^{(1)}_{j_1}v_{j_1}(n) + \sum_{j_1=0}^{L_1}\sum_{j_2=0}^{L_2} c^{(2)}_{j_1,j_2}v_{j_1}(n)v_{j_2}(n)+\cdots\]</div>
+<p>where</p>
+<div class="math">
+\[v_{j}(n)=\sum_m b_j(m)x(n-m)\]</div>
+<p>and <span class="math">\(c^{(1)}_j, c^{(2)}_{j_1,j_2}, \cdots\)</span> represent the expansion coefficients of the respective kernels. Estimating the coefficients <span class="math">\(c_i\)</span> can be done using linear regression or other statistical estimation methods. Recapturing the kernels from these coefficients is then straightforward.</p>
+</div>
+<div class="section" id="principal-dynamic-modes">
+<h2>Principal Dynamic Modes<a class="headerlink" href="#principal-dynamic-modes" title="Permalink to this headline">¶</a></h2>
+<p>Principal Dynamic Mode (PDM) analysis is a non-parametric framework to estimate a system&#8217;s nonlinear dynamics. Built on top of a Volterra series expansion, PDM analysis is a way to segregate the linear from the nonlinear dynamics of a system. Performing such an analysis opens a new window to view the structure of the system - something traditional kernel &amp; non-parametric approaches typically lack.</p>
+<p>Essentially a signal processing technique, PDM analysis uses a Volterra-Laguerre expansion framework to model the system&#8217;s output.</p>
+</div>
+</div>
+<div class="section" id="installing-pylysis">
+<h1>Installing PyLysis<a class="headerlink" href="#installing-pylysis" title="Permalink to this headline">¶</a></h1>
+<p>TODO</p>
+<div class="section" id="dependences">
+<h2>Dependences<a class="headerlink" href="#dependences" title="Permalink to this headline">¶</a></h2>
+<p>PyLysis depends on</p>
+<ul class="simple">
+<li>Python 2.7</li>
+<li>Numpy 1.6.2</li>
+<li>Scipy 0.11</li>
+<li>matplotlib 1.1.0</li>
+</ul>
+</div>
+<div class="section" id="download-pylysis">
+<h2>Download PyLysis<a class="headerlink" href="#download-pylysis" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+</div>
+<div class="section" id="licence">
+<h2>Licence<a class="headerlink" href="#licence" title="Permalink to this headline">¶</a></h2>
+<p>PyLysis is licensed under the terms of the GNU General Public License as
+published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>Click <a class="reference external" href="#">here</a> to download PyLysis.</p>
+<p>PyLysis would like to be a collaborative project. Any help is welcome, from
+a bug notification to a more demanding collaboration. Please refer to my
+<a class="reference external" href="#">webpage</a> for contacts.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">About pyLysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-structure">Model Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#principal-dynamic-modes">Principal Dynamic Modes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#installing-pylysis">Installing PyLysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dependences">Dependences</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#download-pylysis">Download PyLysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#licence">Licence</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+</ul>
+
+          <h3 style="margin-top: 1.5em;">Search</h3>
+          <form class="search" action="search.html" method="get">
+            <input type="text" name="q" />
+            <input type="submit" value="Go" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+          </form>
+          <p class="searchtip" style="font-size: 90%">
+            Enter search terms or a module, class or function name.
+          </p>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <a href="index.html" title="Welcome to pyLysis’s documentation!"
+             >previous</a> |
+          <a href="getting_started.html" title="Getting Started"
+             >next</a> |
+          <a href="genindex.html" title="General Index"
+             >index</a>
+            <br/>
+            <a href="_sources/outline.txt"
+               rel="nofollow">Show Source</a>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer">
+        &copy; Copyright 2013, Brian Hurt.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,71 @@
+============================================
+Principal Dynamic Mode (PDM) Analysis
+============================================
+
+-------------
+Introduction
+-------------
+Principal Dynamic Mode (PDM) analysis is a non-parametric framework to estimate a system's nonlinear dynamics. Built on top of a Volterra series expansion, PDM analysis is a way to segregate the linear from the nonlinear dynamics of a system. Performing such an analysis opens a new window to view the structure of the system - something traditional kernal & non-parametric approaches typically lack.
+
+Essentially a signal processing technique, PDM analysis uses a Volterra-Laguerre expansion framework to model the system's output. A Volterra series, which is similar to a Taylor series expansion in structure, has the added benefit of capturing 'memory' effects. However direct estimation of the higher order kernals is challenging for a pure Volterra series due to the nonlinearities, so the kernals are estimated using Laguerre Basis Functions. 
+
+PDM analysis has been used in neuroscience and electrical engineering because of the timeseries-like nature of the measurements in these fields. 
+
+-----------------
+Model Structure
+-----------------
+::math:
+    y = k_0 + k_1 \otimes X + k_2 \otimes X^T X
+------------------
+General Procedure
+------------------
+
+Generate Model
+===============
+
+Data
+------
+#. Input Data X (N-dim, M-Samples, frequency)
+#. Clean Data (resample, interpolate, de-mean, etc.)
+
+
+Kernal Estimation
+------------------
+#. Estimate the Laguerre coefficients directly from the data
+    - Generate (get) :math: `L` laguerre functions. Provide N exponential scaling factors :math: `\alpha_n` (_0.5_, :math: `\alpha_n \in \left[0,1\right], n \in \left[1,2,...,N\right])`
+    - Estimate Laguerre Basis Function weighting, :math: `V` using L.S. Regression (LS is naive; Other estimation techniques possible here). 
+        .. math:
+            
+            X = \sum_{l=1}^L {V_l \dot L_l^{\alpha}\left(x\right)
+        ..
+        
+#. Estimate Kernals using Laguerre basis functions :math: `L` & their coefficients :math: `V`
+    - Kernal is the convolution of the Laguerre basis functions with their coeficients.
+    
+Principal Dynamical Modes
+--------------------------
+#. Estimate the linear dynamics using singular value decomposition of the kernal estimates.
+#. Estimate the so-called "Static non-linearities" using a P-order (_P=3_) polynomial
+
+Usage
+======
+
+Once the model has been fit, one can do any of the following:
+
+View Model Parameters
+----------------------
+Viewing the PDM in the frequency spectrum allows one to interpret the 
+
+Generate Predicted Output
+-------------------------
+Prediction is at the core of modeling. Generate and evaluate predictions based on a input data set.
+    
+------------------
+Example Simulation
+------------------
+TODO
+
+-----------------------
+Model Meta-parameters
+-----------------------
+TODO

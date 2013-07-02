@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyLysis &mdash; PyLysis Documentation</title>
+    
+    <link rel="stylesheet" href="_static/agogo.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/tables.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PyLysis Documentation" href="index.html" />
+    <link rel="prev" title="About PyLysis" href="outline.html" />
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-41652893-2', 'brianhurt.com');
+          ga('send', 'pageview');
+
+    </script>
+
+  </head>
+  <body>
+    <div class="header-wrapper">
+      <div class="header">
+          <p class="logo"><a href="index.html">
+            <img class="logo" src="_static/logo_2.png" alt="Logo"/>
+          </a></p>
+        <div class="headertitle"><a
+          href="index.html">PyLysis Documentation</a></div>
+        <div class="rel">
+          <a href="outline.html" title="About PyLysis"
+             accesskey="P">previous</a> |
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="toctree-wrapper compound" id="getting-started">
+<ul class="simple">
+</ul>
+</div>
+<div class="section" id="id1">
+<h1>Getting Started<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="nonlinear-system-modeling-with-volterra-laguerre-series">
+<h2>Nonlinear System Modeling with Volterra-Laguerre Series<a class="headerlink" href="#nonlinear-system-modeling-with-volterra-laguerre-series" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="build-and-evaluate-siso-volterra-laguerre-model-from-input-output-data">
+<h3>Build and Evaluate SISO Volterra-Laguerre Model from Input/Output Data<a class="headerlink" href="#build-and-evaluate-siso-volterra-laguerre-model-from-input-output-data" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt>Generate Data and initialize the model.</dt>
+<dd><p class="first">The module comes with data generation functions to build and test models</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Non_Linear_Dynamics.models.non_parametric.volterra_series</span> <span class="kn">import</span> <span class="n">VolterraLaguerre</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Non_Linear_Dynamics.data.generate</span> <span class="kn">import</span> <span class="n">SISO_with_Laguerres</span>  <span class="c"># IO data generating function</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">SISO_with_Laguerres</span><span class="p">(</span><span class="n">num_points</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">num_laguerres</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">memory</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span> <span class="o">=</span> <span class="n">VolterraLaguerre</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">num_laguerres</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="last admonition note">
+<p class="first admonition-title">Note</p>
+<p>the ommited <tt class="docutils literal"><span class="pre">memory</span></tt> argument in the <tt class="docutils literal"><span class="pre">VolterraLaguerre</span></tt> call is calculated from the <tt class="docutils literal"><span class="pre">alpha</span></tt> argument. You can explicitly define it if you want.</p>
+<div class="last math">
+\[int\left[\frac{-30-log(1-\alpha)}{log(\alpha)}\right]\]</div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Estimate Kernels using Laguerre basis functions <span class="math">\(L\)</span> and their coefficients <span class="math">\(c\)</span></dt>
+<dd><ul class="first simple">
+<li>Kernel is the convolution of the Laguerre basis functions with their coeficients.</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#39;LS&#39;</span><span class="p">)</span>  <span class="c"># uses the num_laguerres=3 argument above.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span><span class="o">.</span><span class="n">plot_kernals</span><span class="p">()</span>  <span class="c"># opens a new figure</span>
+</pre></div>
+</div>
+<a class="last reference internal image-reference" href="_images/siso_kernels.png"><img alt="_images/siso_kernels.png" class="align-center" src="_images/siso_kernels.png" style="width: 700px;" /></a>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Estimate output using model</dt>
+<dd><p class="first">Using the exact input data</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">y_est</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="n">rms</span> <span class="o">=</span> <span class="n">v1</span><span class="o">.</span><span class="n">estimate_y</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span><span class="o">.</span><span class="n">plot_output</span><span class="p">()</span>  <span class="c"># opens a new figure</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/siso_let_y_estimate.png"><img alt="_images/siso_let_y_estimate.png" class="align-center" src="_images/siso_let_y_estimate.png" style="width: 700px;" /></a>
+<p>Using the NEW input data:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x_new</span><span class="p">,</span> <span class="n">y_new</span> <span class="o">=</span> <span class="n">SISO_with_Laguerres</span><span class="p">(</span><span class="n">num_points</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">num_laguerres</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">memory</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_est</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="n">rms</span> <span class="o">=</span> <span class="n">v1</span><span class="o">.</span><span class="n">estimate_y</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_new</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_new</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">v1</span><span class="o">.</span><span class="n">plot_output</span><span class="p">()</span>  <span class="c"># opens a new figure</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
+<div class="section" id="build-and-evaluate-miso-volterra-laguerre-model-from-input-output-data">
+<h3>Build and Evaluate MISO Volterra-Laguerre Model from Input/Output Data<a class="headerlink" href="#build-and-evaluate-miso-volterra-laguerre-model-from-input-output-data" title="Permalink to this headline">¶</a></h3>
+<p>TODO</p>
+</div>
+<div class="section" id="pdm-analysis-of-a-siso-volterra-laguerre-model">
+<h3>PDM Analysis of a SISO Volterra-Laguerre Model<a class="headerlink" href="#pdm-analysis-of-a-siso-volterra-laguerre-model" title="Permalink to this headline">¶</a></h3>
+<p>TODO</p>
+</div>
+<div class="section" id="pdm-analysis-of-a-miso-volterra-laguerre-model">
+<h3>PDM Analysis of a MISO Volterra-Laguerre Model<a class="headerlink" href="#pdm-analysis-of-a-miso-volterra-laguerre-model" title="Permalink to this headline">¶</a></h3>
+<p>TODO</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="outline.html">About PyLysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="outline.html#installing-pylysis">Installing PyLysis</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#nonlinear-system-modeling-with-volterra-laguerre-series">Nonlinear System Modeling with Volterra-Laguerre Series</a></li>
+</ul>
+</li>
+</ul>
+
+          <h3 style="margin-top: 1.5em;">Search</h3>
+          <form class="search" action="search.html" method="get">
+            <input type="text" name="q" />
+            <input type="submit" value="Go" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+          </form>
+          <p class="searchtip" style="font-size: 90%">
+            Enter search terms or a module, class or function name.
+          </p>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <a href="outline.html" title="About PyLysis"
+             >previous</a> |
+          <a href="genindex.html" title="General Index"
+             >index</a>
+            <br/>
+            <a href="_sources/getting_started.txt"
+               rel="nofollow">Show Source</a>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer">
+        &copy; Copyright 2013, Brian Hurt.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>
