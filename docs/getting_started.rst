@@ -31,6 +31,18 @@ Build and Evaluate SISO Volterra-Laguerre Model from Input/Output Data
 
 #. Estimate Kernels using Laguerre basis functions :math:`L` and their coefficients :math:`c`
     - Kernel is the convolution of the Laguerre basis functions with their coeficients.
+
+    >>> v1.fit(order=2, method='LS')  # uses the num_laguerres=3 argument above.
+    >>> v1.plot_kernals()  # opens a new figure
+
+
+    - Kernel is the convolution of the Laguerre basis functions with their coeficients.
+
+    >>> v1.fit(order=2, method='LS')  # uses the num_laguerres=3 argument above.
+    >>> v1.plot_kernals()  # opens a new figure
+
+
+    - Kernel is the convolution of the Laguerre basis functions with their coeficients.
     
     >>> v1.train(order=2, method='LS')  # uses the num_laguerres=3 argument above.
     >>> v1.plot_kernals()  # opens a new figure
